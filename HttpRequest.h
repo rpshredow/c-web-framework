@@ -2,6 +2,7 @@
 #define HTTPREQUEST_H
 
 #include <string>
+#include <map>
 
 class HttpRequest {
     public: 
@@ -16,6 +17,7 @@ class HttpRequest {
         std::string uri;
         std::string httpVersion;
         std:: string raw_request;
+        std::map<std::string, std::string> headerElements;
         void PrintRawData();
         void PopulateData();
         

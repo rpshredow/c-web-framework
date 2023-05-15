@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 HttpRequest::HttpRequest(std::string raw_request) : raw_request(raw_request){
     PopulateData();
@@ -13,13 +14,16 @@ void HttpRequest::PrintRawData() {
 }
 
 void HttpRequest::PopulateData() {
-    std::string str = raw_request;
-    std::string::size_type pos = str.find('\n'); // Find first newline character
-    if (pos != std::string::npos) {
-        str = str.substr(0, pos); // Extract substring up to newline
+    std::string request_data = raw_request;
+    std::istringstream iss(request_data);
+    std::vector<std::string> lines;
+    std::string line;
+
+    while(std::getline(iss, line)) {
+        lines.push_back(line);
     }
 
-    std::stringstream ss(str);
+    std::stringstream ss(lines[0]);
     std::string array[3];
     std::string word;
     int i = 0;

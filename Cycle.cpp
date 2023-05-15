@@ -9,16 +9,14 @@
 
 #include "Cycle.h"
 #include "HttpRequest.h"
+#include "HttpResponse.h"
 
 #define PORT 8080
 void Cycle::startServer() {
     int server_fd, new_socket; long valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
-    
-    // Only this line has been changed. Everything is same.
-    char *hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-    
+        
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
     {
@@ -26,7 +24,6 @@ void Cycle::startServer() {
         exit(EXIT_FAILURE);
     }
     
-
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons( PORT );
@@ -58,24 +55,40 @@ void Cycle::startServer() {
             exit(EXIT_FAILURE);
         }
         
-        char buffer[30000] = {0};
-        valread = read( new_socket , buffer, 30000);
+        char buffer[4096] = {0};
+        valread = read( new_socket , buffer, 4096);
 
-        std::string str(buffer);
+        std::string request_raw(buffer);
 
-        HttpRequest request(str);
+        HttpResponse response;
+        HttpRequest request(request_raw);
+
         std::string uri = "/";
         if(uri.find(request.getUri()) != std::string::npos){
-            write(new_socket, hello, strlen(hello));
+            // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
+            response.setMessage("Home Page");
+            std::string resp = response.getResponse();
+            char * res = &resp[0];
+            write(new_socket, res, strlen(res));
+            std::cout << res << std::endl;
+            continue;
+        }
+
+        uri = "/hello";
+        if(uri.find(request.getUri()) != std::string::npos){
+            //const char *response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
+            response.setMessage("Hello, World!");
+            std::string resp = response.getResponse();
+            char * res = &resp[0];
+            write(new_socket, res, strlen(res));
             continue;
         }
 
         // std::cout << request.getUri() << std::endl;
 
         // printf("%s\n", buffer);
-        char *response = "HTTP/1.1 404 Not Found\nContent-Type: text/plain\nContent-Length: 12\n\nResource Not Found";
-        write(new_socket , response , strlen(response));
-        printf("-------------Hello message sent------------\n\n");
+        const char *resp = "HTTP/1.1 404 Not Found\nContent-Type: text/plain\nContent-Length: 18\n\nResource not found";
+        write(new_socket , resp , strlen(resp));
         close(new_socket);
     }
 }
