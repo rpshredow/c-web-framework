@@ -3,15 +3,33 @@
 #include <string>
 
 MySql::MySql(){}
-MySql::MySql(std::string ipaddress, std::string port, std::string username, std::string password) : 
-ipaddress(ipaddress), port(port), username(username), password(password) {}
+MySql::MySql(std::string ipaddress, std::string port, std::string username, std::string password, std::string database) : 
+ipaddress(ipaddress), port(port), username(username), password(password), database(database) 
+{
+    MySql::connectToDatabase();
+}
 
 void MySql::connectToDatabase() {
     std::string address = "tcp://" + ipaddress + ":" + port;
 
     driver = sql::mysql::get_mysql_driver_instance();
     con = driver->connect(address, username, password);
-    con->setSchema("example");
+    con->setSchema(database);
+}
+
+std::string MySql::getAll() {
+    stmt = con->createStatement();
+    res = stmt->executeQuery("SELECT * FROM persons");
+
+    std::string output = "";
+
+    while (res->next()) {
+        // Process the results
+        output += "Name: " + res->getString("name") + " " + res->getString("surname") 
+            + "\t Email: " + res->getString("email") + "\t Password: " + res->getString("password");
+    }
+
+    return output;
 }
 
 /*
