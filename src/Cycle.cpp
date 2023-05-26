@@ -6,14 +6,29 @@
 #include <string.h>
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "Cycle.h"
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 
+int new_socket;
+
+void get(std::string uri, HttpRequest request, HttpResponse response) {
+    if(uri.find(request.getUri()) != std::string::npos){
+        // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
+        response.setMessage("Home Page");
+        std::string resp = response.getResponse();
+        char * res = &resp[0];
+        write(new_socket, res, strlen(res));
+        std::cout << res << std::endl;
+    }
+}
+
 #define PORT 8080
 void Cycle::startServer() {
-    int server_fd, new_socket; long valread;
+    int server_fd; 
+    long valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
         
@@ -48,7 +63,7 @@ void Cycle::startServer() {
 
     while(1)
     {
-        printf("+++++++ Waiting for new connection ++++++++\n\n");
+        printf("Waiting for new connection\n\n");
         if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0)
         {
             perror("In accept");
@@ -63,26 +78,28 @@ void Cycle::startServer() {
         HttpResponse response;
         HttpRequest request(request_raw);
 
-        std::string uri = "/";
-        if(uri.find(request.getUri()) != std::string::npos){
-            // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
-            response.setMessage("Home Page");
-            std::string resp = response.getResponse();
-            char * res = &resp[0];
-            write(new_socket, res, strlen(res));
-            std::cout << res << std::endl;
-            continue;
-        }
+        get("/", request, response);
 
-        uri = "/hello";
-        if(uri.find(request.getUri()) != std::string::npos){
-            //const char *response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-            response.setMessage("Hello, World!");
-            std::string resp = response.getResponse();
-            char * res = &resp[0];
-            write(new_socket, res, strlen(res));
-            continue;
-        }
+        // std::string uri = "/";
+        // if(uri.find(request.getUri()) != std::string::npos){
+        //     // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
+        //     response.setMessage("Home Page");
+        //     std::string resp = response.getResponse();
+        //     char * res = &resp[0];
+        //     write(new_socket, res, strlen(res));
+        //     std::cout << res << std::endl;
+        //     continue;
+        // }
+
+        // uri = "/hello";
+        // if(uri.find(request.getUri()) != std::string::npos){
+        //     //const char *response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
+        //     response.setMessage("Hello, World!");
+        //     std::string resp = response.getResponse();
+        //     char * res = &resp[0];
+        //     write(new_socket, res, strlen(res));
+        //     continue;
+        // }
 
         // std::cout << request.getUri() << std::endl;
 
