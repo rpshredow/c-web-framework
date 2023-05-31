@@ -14,14 +14,12 @@
 
 class MySql {
     public: 
-        MySql();
-        MySql(std::string ipaddress = "127.0.0.1", std::string port = "3306", std::string username, std::string password, std::string database);
-        void connectToDatabase();
+        // MySql();
+        MySql(std::string ipaddress = "127.0.0.1", std::string port = "3306", std::string username = "robert", std::string password = "bob59145", std::string database = "example");
+        std::string connectToDatabase();
         std::string getAll();
 
     private:
-        sql::mysql::MySQL_Driver *driver;
-        sql::Connection *con;
         sql::Statement *stmt;
         sql::ResultSet *res;
         std::string ipaddress;

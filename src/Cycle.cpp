@@ -11,6 +11,7 @@
 #include "Cycle.h"
 #include "HttpRequest.h"
 #include "HttpResponse.h"
+#include "MySql.h"
 
 int new_socket;
 
@@ -78,18 +79,20 @@ void Cycle::startServer() {
         HttpResponse response;
         HttpRequest request(request_raw);
 
-        get("/", request, response);
+        // get("/", request, response);
 
-        // std::string uri = "/";
-        // if(uri.find(request.getUri()) != std::string::npos){
-        //     // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
-        //     response.setMessage("Home Page");
-        //     std::string resp = response.getResponse();
-        //     char * res = &resp[0];
-        //     write(new_socket, res, strlen(res));
-        //     std::cout << res << std::endl;
-        //     continue;
-        // }
+        std::string uri = "/";
+        if(uri.find(request.getUri()) != std::string::npos){
+            // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
+            MySql query;
+            std::string output = query.connectToDatabase();
+            response.setMessage(output);
+            std::string resp = response.getResponse();
+            char * res = &resp[0];
+            write(new_socket, res, strlen(res));
+            // std::cout << res << std::endl;
+            continue;
+        }
 
         // uri = "/hello";
         // if(uri.find(request.getUri()) != std::string::npos){
