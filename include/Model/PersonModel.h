@@ -1,12 +1,12 @@
-#ifndef PERSON_H
-#define PERSON_H
+#ifndef PERSONMODEL_H
+#define PERSONMODEL_H
 
 #include <string>
 
-class Person {
+class PersonModel {
     public: 
-        Person();
-        Person(int id, std::string name, std::string surname, std::string email, std::string password);
+        PersonModel();
+        PersonModel(int id, std::string name, std::string surname, std::string email, std::string password);
         int getId();
         std::string getName();
         void setName(std::string name);

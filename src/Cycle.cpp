@@ -12,6 +12,7 @@
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 #include "MySql.h"
+#include "../include/Model/PersonModel.h"
 
 int new_socket;
 
@@ -81,7 +82,7 @@ void Cycle::startServer() {
 
         // get("/", request, response);
 
-        std::string uri = "/";
+        std::string uri = "/persons";
         if(uri.find(request.getUri()) != std::string::npos){
             // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
             MySql query;
