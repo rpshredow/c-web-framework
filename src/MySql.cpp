@@ -27,11 +27,11 @@ std::string MySql::connectToDatabase() {
 
     stmt = con->createStatement();
     // stmt->execute("INSERT INTO persons (name, surname, email, password) VALUES ('Robert', 'Shredow', 'rshredow@gmail.com', '59145')");
-    res = stmt->executeQuery("SELECT * FROM persons");
+    res = stmt->executeQuery("SELECT * FROM Persons");
 
     std::string output = "";
     while (res->next()) {
-        output += "Name: " + res->getString("name") + " " + res->getString("surname") 
+        output += "ID: " + std::to_string(res->getInt("id")) + "\t Name: " + res->getString("name") + " " + res->getString("surname") 
             + "\t Email: " + res->getString("email") + "\t Password: " + res->getString("password") 
             + "\n";
     }

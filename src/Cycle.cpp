@@ -30,7 +30,7 @@ void get(std::string uri, HttpRequest request, HttpResponse response) {
 #define PORT 8080
 void Cycle::startServer() {
     int server_fd; 
-    long valread;
+    // long valread;
     struct sockaddr_in address;
     int addrlen = sizeof(address);
         
@@ -73,7 +73,8 @@ void Cycle::startServer() {
         }
         
         char buffer[4096] = {0};
-        valread = read( new_socket , buffer, 4096);
+        // valread = read( new_socket , buffer, 4096);
+        read( new_socket , buffer, 4096);
 
         std::string request_raw(buffer);
 
