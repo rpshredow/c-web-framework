@@ -7,14 +7,14 @@ class PersonModel {
     public: 
         PersonModel();
         PersonModel(int id, std::string name, std::string surname, std::string email, std::string password);
-        int getId();
-        std::string getName();
+        int getId() const;
+        std::string getName() const;
         void setName(std::string name);
-        std::string getSurname();
+        std::string getSurname() const;
         void setSurname(std::string surname);
-        std::string getEmail();
+        std::string getEmail() const;
         void setEmail(std::string email);
-        std::string getPassword();
+        std::string getPassword() const;
         void setPassword(std::string password);
 
     private:

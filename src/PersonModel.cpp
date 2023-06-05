@@ -1,15 +1,15 @@
-#include "../../include/Model/PersonModel.h"
+#include "PersonModel.h"
 
 PersonModel::PersonModel(){}
 
 PersonModel::PersonModel(int id, std::string name, std::string surname, std::string email, std::string password) : 
-name(name), surname(surname), email(email), password(password) {}
+id(id), name(name), surname(surname), email(email), password(password) {}
 
-int PersonModel::getId() {
+int PersonModel::getId() const {
     return id;
 }
 
-std::string PersonModel::getName() {
+std::string PersonModel::getName() const {
     return name;
 }
 
@@ -17,7 +17,7 @@ void PersonModel::setName(std::string name) {
     name = name;
 }
 
-std::string PersonModel::getSurname() {
+std::string PersonModel::getSurname() const {
     return surname;
 }
 
@@ -25,7 +25,7 @@ void PersonModel::setSurname(std::string surname) {
     surname = surname;
 }
 
-std::string PersonModel::getEmail() {
+std::string PersonModel::getEmail() const {
     return email;
 }
 
@@ -33,7 +33,7 @@ void PersonModel::setEmail(std::string email) {
     email = email;
 }
 
-std::string PersonModel::getPassword() {
+std::string PersonModel::getPassword() const {
     return password;
 }
 

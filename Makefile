@@ -16,7 +16,7 @@ run: clean all
 	clear
 	./$(BIN)/$(EXECUTABLE)
 
-$(BIN)/$(EXECUTABLE): $(wildcard $(SRC)/*.cpp)
+$(BIN)/$(EXECUTABLE): $(wildcard $(SRC)/*.cpp) $(wildcard $(SRC)/Models/*.cpp)
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
 
 clean:

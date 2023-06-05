@@ -12,7 +12,7 @@
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 #include "MySql.h"
-#include "../include/Model/PersonModel.h"
+// #include "Model/PersonModel.h"
 
 int new_socket;
 
@@ -63,6 +63,9 @@ void Cycle::startServer() {
         exit(EXIT_FAILURE);
     }
 
+    MySql query;
+    query.connectToDatabase();
+
     while(1)
     {
         printf("Waiting for new connection\n\n");
@@ -86,25 +89,34 @@ void Cycle::startServer() {
         std::string uri = "/persons";
         if(uri.find(request.getUri()) != std::string::npos){
             // const char *res = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 4\n\nHome";
-            MySql query;
-            std::string output = query.connectToDatabase();
+            
+
+            std::string output = "";
+
+            std::vector<PersonModel> myVector = query.getAll();
+            for(const auto& obj : myVector) {
+                output += "ID: " + std::to_string(obj.getId()) + ", Name: " + obj.getName() + ", Surname: " + obj.getSurname() + ", Email: " + obj.getEmail() + ", Password: " + obj.getPassword() + '\n'; 
+            }
+
             response.setMessage(output);
             std::string resp = response.getResponse();
             char * res = &resp[0];
             write(new_socket, res, strlen(res));
             // std::cout << res << std::endl;
+            close(new_socket);
             continue;
         }
 
-        // uri = "/hello";
-        // if(uri.find(request.getUri()) != std::string::npos){
-        //     //const char *response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-        //     response.setMessage("Hello, World!");
-        //     std::string resp = response.getResponse();
-        //     char * res = &resp[0];
-        //     write(new_socket, res, strlen(res));
-        //     continue;
-        // }
+        uri = "/hello";
+        if(uri.find(request.getUri()) != std::string::npos){
+            //const char *response = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
+            response.setMessage("Hello, World!");
+            std::string resp = response.getResponse();
+            char * res = &resp[0];
+            write(new_socket, res, strlen(res));
+            close(new_socket);
+            continue;
+        }
 
         // std::cout << request.getUri() << std::endl;
 
